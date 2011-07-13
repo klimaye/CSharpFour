@@ -66,13 +66,13 @@ namespace CSharapFour
             ////what will happen below?
             //dynamic whatAboutThis = x + y * z - k;
 
-            //namedParameters();
+            namedParameters();
 
-            //optionalParameters();
+            optionalParameters();
 
-            //Dynamics();
+            ////Dynamics();
 
-            //dynamicObjects();
+            dynamicObjects();
 
             comExample();
 
@@ -193,16 +193,18 @@ namespace CSharapFour
         {
             //Performance Vs Reflection
             var music = new Music("test.wav");
-            var video = new Video("vid.wmv");
-
             PlayMedia(music);
-            PlayMedia(video);
+
+
+            //var video = new Video("vid.wmv");
+            //PlayMedia(video);
 
             Console.Read();
             Console.Read();
         }
 
         static void PlayMedia<T>(T media)
+            where T : IMedia
         {
             var startTick = Environment.TickCount;
             for (int i = 0; i < 1000000; i++)
@@ -220,6 +222,15 @@ namespace CSharapFour
             }
             endTick = Environment.TickCount - startTick;
             Console.WriteLine("with dynamic time taken in sec: {0} ", endTick / 1000.0m);
+
+            startTick = Environment.TickCount;
+            for (int i = 0; i < 1000000; i++)
+            {
+                IMedia normalWay = media;
+                normalWay.Play();
+            }
+            endTick = Environment.TickCount - startTick;
+            Console.WriteLine("with normal way time taken in sec: {0} ", endTick / 1000.0m);
         }
 
         private static void ironRubyInteract()
@@ -342,7 +353,7 @@ namespace CSharapFour
 
         private static void dynamicObjects()
         {
-            dynamic dict = new DynamicDictionary();
+            dynamic dict = new DynamicDictionary(); //or use built in ExpandoObject
             //dynamic properties.
             dict.Foo = "Hey";
             dict.Bar = "There";
