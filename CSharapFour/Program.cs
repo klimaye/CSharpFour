@@ -32,11 +32,21 @@ namespace CSharapFour
     {
         private static void coAndContraVariance()
         {
+            //co variance
             ICoV<Apple> apple = null;
             ICoV<Fruit> fruit = apple;
 
+            //co variance
+            List<Banana> bananas = new List<Banana>();            
+            //this works because IEnumerable<Fruit> is not malleable
+            IEnumerable<Fruit> fruitBowl = bananas;
+            //This does not work because List<Fruit> is malleable
+            //List<Fruit> anotherBowl = bananas;
+
+            //contra variance
             IContra<Fruit> anotherFruit = null;
             IContra<Banana> banana = anotherFruit;
+
         }
 
         static void Main(string[] args)
