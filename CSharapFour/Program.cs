@@ -12,10 +12,40 @@ using CSharapFour.Domain;
 
 namespace CSharapFour
 {
+    class Fruit {}
+    class Banana : Fruit {}
+    class Apple : Fruit {}
+
+    //only supports methods returning T or IEnumerable<T>
+    interface ICoV<out T>
+    {
+        T GetAnInstanceOfT { get; }
+    }
+
+    //only supports methods taking in T
+    interface IContra<in T>
+    {
+        void TakeInAnInstanceOfT(T item);
+    }
+
     class Program
     {
+        private static void coAndContraVariance()
+        {
+            ICoV<Apple> apple = null;
+            ICoV<Fruit> fruit = apple;
+
+            IContra<Fruit> anotherFruit = null;
+            IContra<Banana> banana = anotherFruit;
+        }
+
         static void Main(string[] args)
         {
+            //object
+            dynamic x = "hello";
+            Console.WriteLine(x.Length);
+            x = new int[] { 10, 20, 30 };
+            Console.WriteLine(x.Length);
 
             ////you can do this but this is not the intended use.
             //dynamic x = 10;
@@ -25,9 +55,6 @@ namespace CSharapFour
             //dynamic whoaWillThisWork = x * y + z + k;
             ////what will happen below?
             //dynamic whatAboutThis = x + y * z - k;
-            comExample();
-
-            jsonWork();
 
             //namedParameters();
 
@@ -37,13 +64,19 @@ namespace CSharapFour
 
             //dynamicObjects();
 
+            comExample();
+
+            jsonWork();
+
             ironRubyInteract();
 
             Console.ReadLine();
 
-            massiveExample();
-
             performanceTest();
+
+            coAndContraVariance();
+
+            massiveExample();
 
             //Base b = new Derived();
             //b.Foo( 4, 6);
