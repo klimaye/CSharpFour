@@ -4,6 +4,7 @@ using System.Dynamic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Web.Script.Serialization;
 using System.Xml.Linq;
 using Massive;
 using Microsoft.Office.Interop.Excel;
@@ -15,6 +16,19 @@ namespace CSharapFour
     {
         static void Main(string[] args)
         {
+
+            ////you can do this but this is not the intended use.
+            //dynamic x = 10;
+            //dynamic y = 3.14;
+            //dynamic z = "test";
+            //dynamic k = true;
+            //dynamic whoaWillThisWork = x * y + z + k;
+            ////what will happen below?
+            //dynamic whatAboutThis = x + y * z - k;
+            comExample();
+
+            jsonWork();
+
             //namedParameters();
 
             //optionalParameters();
@@ -25,10 +39,87 @@ namespace CSharapFour
 
             ironRubyInteract();
 
-            Base b = new Derived();
-            b.Foo( 4, 6);
-
             Console.ReadLine();
+
+            massiveExample();
+
+            performanceTest();
+
+            //Base b = new Derived();
+            //b.Foo( 4, 6);
+        }
+
+        private static void comExample()
+        {
+            var x1 = new Microsoft.Office.Interop.Excel.Application();
+            x1.Visible = true;
+
+            var workBooks = x1.Workbooks;
+            var workBook = workBooks.Add(XlSheetType.xlWorksheet);
+            var workSheet = (Worksheet)x1.ActiveSheet;
+            //Console.WriteLine("{0}", x1.Cells.Count);
+            //earlier way
+            ((Microsoft.Office.Interop.Excel.Range)workSheet.Cells[1, 1]).Value2 = "Process Name";
+            ((Microsoft.Office.Interop.Excel.Range)workSheet.Cells[1, 2]).Value2 = "Memory Usage";
+
+            //new way
+            workSheet.Cells[1, 1].Value2 = "Process Name";
+            workSheet.Cells[1, 2].Value2 = "Memory Usage";
+
+            var wordApp = new Microsoft.Office.Interop.Word.Application();
+            wordApp.Visible = true;
+
+            //earlier way
+            object useDefaultValue = Type.Missing;
+
+            wordApp.Documents.Add(ref useDefaultValue, ref useDefaultValue,
+                ref useDefaultValue, ref useDefaultValue);
+
+            var rng = wordApp.Selection.Range;
+            rng.PasteSpecial(ref useDefaultValue,
+                                            ref useDefaultValue,
+                                            ref useDefaultValue,
+                                            ref useDefaultValue,
+                                            ref useDefaultValue,
+                                            ref useDefaultValue,
+                                            ref useDefaultValue);
+
+            //new way
+            wordApp.Documents.Add();
+
+
+            // PasteSpecial has seven reference parameters, all of which are 
+            // optional. This example uses named arguments to specify values 
+            // for two of the parameters. Although these are reference 
+            // parameters, you do not need to use the ref keyword, or to create 
+            // variables to send in as arguments. You can send the values directly.
+            rng.PasteSpecial();
+        }
+
+        private static void jsonWork()
+        {
+
+            //other uses on the web.
+            var testObject = new { Name = "Dynamic", Age = 1, Popularity = "Rising" };
+            var jsonRepresentation = testObject.ToJson();
+            //Console.WriteLine("json created is : {0}", jsonRepresentation)
+            var conversionOk = "{\"Name\":\"Dynamic\",\"Age\":1,\"Popularity\":\"Rising\"}" == jsonRepresentation;
+            Console.WriteLine("json serialized ok = {0}", conversionOk);
+
+            Console.Read();
+
+
+            string jsonText = "{ xyz: 123, items: [ 10, 100, 1000 ] }";
+            JavaScriptSerializer jss = new JavaScriptSerializer();
+            dynamic json = jss.Deserialize<dynamic>(jsonText);
+            var items = json["items"];
+            items[2] = 1020;
+
+            Console.Read();
+        }
+
+        private static void massiveExample()
+        {
 
             //var table = new Product();
             var table = new DynamicModel("default", tableName: "Production.Product", primaryKeyField: "ProductID");
@@ -42,25 +133,21 @@ namespace CSharapFour
             Console.WriteLine("red color product count : {0}", redColorProducts.Count());
             Console.Read();
 
-            dynamic prodTable = 
+            dynamic prodTable =
                 new DynamicModel(
-                    "default", 
-                    tableName: "Production.Product", 
+                    "default",
+                    tableName: "Production.Product",
                     primaryKeyField: "ProductID");
 
-            var firstSilverProduct = prodTable.First(Color:"Silver");
-            
+            var firstSilverProduct = prodTable.First(Color: "Silver");
+
             Console.WriteLine("first silver product id is {0}", firstSilverProduct.ProductID);
-            
-            Console.Read();
-
-            //other uses on the web.
-            var testObject = new {Name = "Dynamic", Age = 1, Popularity = "Rising"};
-            var jsonRepresentation = testObject.ToJson();
-            Console.WriteLine("json created is : {0}", jsonRepresentation);
 
             Console.Read();
+        }
 
+        private static void performanceTest()
+        {
             //Performance Vs Reflection
             var music = new Music("test.wav");
             var video = new Video("vid.wmv");
@@ -262,32 +349,7 @@ namespace CSharapFour
             SayHello("Harry Potter");
             SayHello(name: "Harry Potter", greeting: "Guten tag ");
 
-            Console.ReadLine();
-
-            /*
-            var x1 = new Microsoft.Office.Interop.Excel.Application();
-            Console.WriteLine("{0}",x1.Cells.Count);
-            //earlier way
-            ((Microsoft.Office.Interop.Excel.Range)x1.Cells[1, 1]).Value2 = "Process Name";
-            ((Microsoft.Office.Interop.Excel.Range)x1.Cells[1, 2]).Value2 = "Memory Usage";
-
-            //new way
-            x1.Cells[1, 1].Value2 = "Process Name";
-            x1.Cells[1, 2].Value2 = "Memory Usage";
-
-            var wordApp = new Microsoft.Office.Interop.Word.Application();
-            wordApp.Visible = true;
-
-            //earlier way
-            object useDefaultValue = Type.Missing;
-
-            wordApp.Documents.Add(ref useDefaultValue, ref useDefaultValue,
-                ref useDefaultValue, ref useDefaultValue);
-
-            //new way
-            wordApp.Documents.Add();
-            */
-
+            Console.ReadLine();            
         }
     }
 }
