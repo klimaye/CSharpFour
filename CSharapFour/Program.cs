@@ -52,39 +52,43 @@ namespace CSharapFour
         static void Main(string[] args)
         {
             //object
-            dynamic x = "hello";
-            Console.WriteLine(x.Length);
-            x = new int[] { 10, 20, 30 };
-            Console.WriteLine(x.Length);
+            //dynamic x = "hello";
+            //Console.WriteLine(x.Length);
+            //x = new int[] { 10, 20, 30 };
+            //Console.WriteLine(x.Length);
 
-            ////you can do this but this is not the intended use.
+            //////you can do this but this is not the intended use.
             //dynamic x = 10;
             //dynamic y = 3.14;
             //dynamic z = "test";
             //dynamic k = true;
             //dynamic whoaWillThisWork = x * y + z + k;
             ////what will happen below?
-            //dynamic whatAboutThis = x + y * z - k;
+            ////dynamic whatAboutThis = x + y * z - k;
+            //Console.ReadLine();
 
-            namedParameters();
+            //namedParameters();
 
-            optionalParameters();
+            //optionalParameters();
 
-            ////Dynamics();
+            //////Dynamics();
 
-            dynamicObjects();
+            //dynamicObjects();
 
-            comExample();
+            //comExample();
 
-            jsonWork();
+            //jsonWork();
 
             ironRubyInteract();
 
-            Console.ReadLine();
+            //Console.ReadLine();
 
-            performanceTest();
+            //performanceTest();
 
-            coAndContraVariance();
+            //Console.ReadLine();
+
+
+            //coAndContraVariance();
 
             massiveExample();
 
